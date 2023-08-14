@@ -26,7 +26,7 @@ If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 Write-Host "Creating Allxon OTA Payload ..."
 
-$file = "Allxon_OTA_Artifact-W-x86.zip"
+$file = "Allxon_OTA_Artifact-W-x86_64.zip"
 $currentEpoch = [int][double]::Parse((Get-Date (get-date).touniversaltime() -UFormat %s))
 
 echo "DateTime: $currentEpoch" > $workingDir\ota_content\.host_info
@@ -34,12 +34,6 @@ echo "DateTime: $currentEpoch" > $workingDir\ota_content\.host_info
 Get-ComputerInfo -Property CsProcessors, WindowsBuildLabEx, OsName, OsVersion, OsArchitecture | Format-List >> $workingDir\ota_content\.host_info
 
 Get-ChildItem -Path $workingDir\ota_content -Recurse >> $workingDir\ota_content\.host_info
-
-$arch = Get-ComputerInfo -Property OsArchitecture
-
-if($arch.OsArchitecture -match '64-bit' ) {
-    $file = $file.Replace("x86", "x86_64")
-}
 
 if(Test-Path -Path $file) {
     Remove-Item -Path $file -Force
